@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Main.qml</file>
+        <file>asserts/add.jpg</file>
+        <file>asserts/add1.jpg</file>
+        <file>asserts/return.jpg</file>
+        <file>AddUI.qml</file>
+        <file>asserts/find.jpg</file>
+        <file>FriendsMessage.qml</file>
+        <file>Core.qml</file>
+        <file>Login.qml</file>
+        <file>Register.qml</file>
+        <file>main.qml</file>
+        <file>Content.qml</file>
+        <file>Buddy.qml</file>
+        <file>MessagePage.qml</file>
+        <file>asserts/right.jpg</file>
+    </qresource>
+</RCC>
