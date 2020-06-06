@@ -26,6 +26,7 @@ public:
     BuddyTeam *team(int)const;
     void clearTeams();
 
+
 private:
     static BuddyModel* instance;
 

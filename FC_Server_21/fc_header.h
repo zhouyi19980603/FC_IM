@@ -24,6 +24,11 @@
 #define FC_FRIENDS_ADD_R        unsigned(FC_FRIENDS | 1<<4)
 #define FC_DELETE_FRIENDS       unsigned(FC_FRIENDS | 1<<5)
 #define FC_FRIENDS_MESSAGE      unsigned(FC_FRIENDS | 1<<6)
+#define FC_FRIENDS_MES          unsigned(FC_FRIENDS | 1<<7) //好友信息（备注，分组）
+#define FC_FRIENDS_REMARK       unsigned(FC_FRIENDS_MES | 1<<0) //备注
+//#define FC_FRIENDS_REMARK_R       unsigned(FC_FRIENDS_MES | 1<<0) //备注返回信息
+#define FC_FRIENDS_GROUP        unsigned(FC_FRIENDS_MES | 1<<1) //分组
+#define FC_FRIENDS_TEST         unsigned(FC_FRIENDS | 1<<0) //测试数据
 
 //part three -- profile about
 //#define FC_ACCOUNT_LENGTH unsigned(6)

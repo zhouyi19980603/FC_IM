@@ -27,11 +27,15 @@ public:
     Q_INVOKABLE void search_friends(const QString& friendsAccount);
     Q_INVOKABLE void add_friends(const QString &msg);
     Q_INVOKABLE void add_friends_result(const char* accout,const QString &msg);
-    Q_INVOKABLE void delete_friend(const QString &msg);
+//    Q_INVOKABLE void delete_friend(const QString &msg);
+    Q_INVOKABLE void update_remark(const int &team,const int &item,const QString &user);
+    Q_INVOKABLE void delete_friend(const int &team,const int &item);
+//    Q_INVOKABLE void update_group(const QString& msg);
 
 
-    void displaytoQML(FC_Message& message);
+    void displaytoQML(FC_Message* message);
     void displaytoQML(char *msg);
+
 
 
 private:

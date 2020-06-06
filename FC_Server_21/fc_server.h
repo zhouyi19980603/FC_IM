@@ -7,6 +7,10 @@
 #include <iostream>
 #include "fc_accept.h"
 #include <vector>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
+using namespace boost::property_tree;
 
 using namespace boost::asio::ip;
 using boost::asio::io_context;
@@ -15,9 +19,10 @@ class FC_Thread_Pool;
 class FC_Database;
 class FC_Accept;
 class FC_Session;
+class FC_BuddyListCtrl;
 
 typedef std::shared_ptr<FC_Session> clients_ptr;
-typedef unordered_map<string,unordered_map<string,vector<string>>> groupmap;
+//typedef unordered_map<string,unordered_map<string,vector<string>>> groupmap;
 
 class FC_Server
 {
@@ -32,17 +37,17 @@ public:
 
 
     //前面为网友A（string）的唯一标识，后面为每个网友A的所有好友的标识
-    //getter
-    groupmap get_groupfriendsList();
-//    groupmap _groupfriendsList;
-    void set_groupfriendsList(groupmap map);
-    //setter
 
-    std::unordered_map<std::string,std::vector<std::string>> _friendsList;
+    void json_data_parser();
+    void make_data_json();
+    void test_data();
+
+    std::unordered_map<std::string,FC_BuddyListCtrl*> _friendsList;
+
     void init_friends_list();
 private:
 
-    groupmap _groupfriendsList;
+
 
     FC_Accept* _fc_accept=nullptr;
     FC_Thread_Pool* _thread_pool = nullptr;

@@ -15,27 +15,27 @@ FC_Message::FC_Message()
     memset(this->_data,'\0',FC_MESSAGE_HEADER_LENGTH+1);
 }
 
-FC_Message::FC_Message(const FC_Message& msg){
-    this->_data = (char *)malloc(header_length());
+FC_Message::FC_Message(const FC_Message& msg){ //拷贝构造函数
+    this->_data = (char *)malloc(header_length()); //申请空间
     memcpy(this->_data,msg._data,header_length());
     this->set_body_length(msg.body_length());
     memcpy(this->_data,msg._data,mess_length());
 }
 
-FC_Message &FC_Message::operator=(const FC_Message &msg)
+FC_Message &FC_Message::operator=(const FC_Message &msg) //拷贝赋值构造
 {
     this->_data=(char*)malloc(header_length());
     memcpy(this->_data,msg._data,header_length());
     this->set_body_length(msg.body_length());
     memcpy(this->_data,msg._data,mess_length());
-
+    return *this;
 }
 
 FC_Message::~FC_Message(){
     free(this->_data);
 }
 
-//getter
+//getter unsigned若省略后一个关键字，大多数编译器都会认为是unsigned int
 unsigned FC_Message::header_length()const{
     return FC_MESSAGE_HEADER_LENGTH;
 }
@@ -59,8 +59,6 @@ char* FC_Message::header()const{
 }
 
 char* FC_Message::body()const{
-    //buff = "zhouyi";
-//    cout<<buff+1<<endl;
     //返回body部分的值
     return this->_data+FC_MESSAGE_HEADER_LENGTH;
 }
@@ -89,7 +87,7 @@ char *FC_Message::get_core_body() const
 //setter
 void FC_Message::set_body_length(unsigned body_len){
     memcpy(this->_data+sizeof (unsigned),&body_len,sizeof (unsigned));
-    this->apply_memory(this->mess_length());
+    this->apply_memory(this->mess_length()); //申请空间
 }
 void FC_Message::set_message_type(unsigned type){
     memcpy(this->_data,&type,sizeof (type));
@@ -126,7 +124,7 @@ void FC_Message::reset_message(){ //reset this message
 void FC_Message::apply_memory(unsigned len){ //apply for new memory
     //apply new memory for message_body
     char *tmp = (char *)malloc(len+1);
-    memset(tmp,'\0',len);
+    memset(tmp,'\0',len+1);
     memcpy(tmp,this->_data,FC_MESSAGE_HEADER_LENGTH);
     free(this->_data);
     this->_data = tmp;

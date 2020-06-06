@@ -17,7 +17,8 @@ public:
 //    FC_Session(tcp::socket socket);
     void start();
     void stop(); //exit login
-    void write(FC_Message& msg);
+//    void write(FC_Message& msg);
+    void write(FC_Message* msg);
 
 
 private:
@@ -28,20 +29,30 @@ private:
     void add_friends();
     void add_friends_lists();
     void delete_friend();
-    void send_friends_lists();
+    void send_friends_lists(string username);
+//    void send_friends_lists(string username,int flag  );
+    void handle_remark();
 
 //    void on_add
     void do_read_header();
     void do_read_body();
-    void do_write();
-    void do_write(FC_Message& msg);
-    void do_write(FC_Message& msg,tcp::socket socket);
+    void do_write(FC_Message* msg);
+    void return_message_ok();
+
+    //about json operation
+    string make_json(string username);
+
+    void append_josn_node();
+
+
+
+//    void do_write(FC_Message& msg);
+//    void do_write(FC_Message& msg,tcp::socket socket);
 
 //    unordered_map<string,clients_ptr> _onlineP;
     FC_Message _fc_message;
-    message_queue _write_msgs;
-//    FC_Message _fc_message_read;
-//    FC_Message _fc_message_write;
+
+//    message_queue _write_msgs; //暂时先不要队列
 
     tcp::socket _socket;
     FC_Server& _server;

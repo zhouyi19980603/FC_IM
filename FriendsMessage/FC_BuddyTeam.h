@@ -21,6 +21,7 @@ class BuddyTeam : public QObject
 
     Q_PROPERTY(QQmlListProperty<BuddyItem> buddys READ buddys)
     Q_PROPERTY(QString teamname READ teamname WRITE setTeamname)
+    Q_PROPERTY(int teamId READ teamId WRITE setTeamId)
 public:
     BuddyTeam(QObject* parent = nullptr);
 
@@ -32,7 +33,10 @@ public:
 
 
     QString teamname()const;
+    int teamId() const;
+
     void setTeamname(const QString& str);
+    void setTeamId(const int& id);
 //signals:
 //    void teamChanged();
 //    void buddysChanged();
@@ -45,6 +49,7 @@ private:
     static void clearItems(QQmlListProperty<BuddyItem>*);
 
     QString m_teamname;
+    int m_id;
     QVector<BuddyItem *>m_items;
 
 };

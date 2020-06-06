@@ -13,7 +13,7 @@
 #include <vector>
 
 using namespace std;
-class FC_Client;
+class FC_Server;
 
 class FC_BuddyItem
 {
@@ -51,7 +51,7 @@ public:
 class FC_BuddyListCtrl
 {
 public:
-    FC_BuddyListCtrl(FC_Client* client);
+    FC_BuddyListCtrl(FC_Server* client);
     ~FC_BuddyListCtrl();
 
     int AddBuddyTeam(int nID);
@@ -92,7 +92,10 @@ public:
 
     string GetBuddyItemAccNum(int nTeamIndex, int nIndex);
     string GetBuddyItemNickName(int nTeamIndex, int nIndex);
-//    int GetBuddyItemId(int nTeamIndex, int nIndex);
+    string GetBuddyItemMarkName(int nTeamIndex, int nIndex);
+    string GetBuddyItemSignName(int nTeamIndex, int nIndex);
+    string GetBuddyItemHeading(int nTeamIndex, int nIndex);
+    string GetBuddyItemGender(int nTeamIndex, int nIndex);
 
     //getter
     FC_BuddyTeamItem* GetBuddyTeamByIndex(int nIndex);
@@ -102,7 +105,7 @@ public:
     void addBuddyModel();
 private:
     std::vector<FC_BuddyTeamItem*> m_arrBuddyTeamItems;  //好友分组信息,在client端填满
-    FC_Client* _client;
+    FC_Server* _client;
 };
 
 

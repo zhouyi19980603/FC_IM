@@ -15,5 +15,6 @@
         <file>Buddy.qml</file>
         <file>MessagePage.qml</file>
         <file>asserts/right.jpg</file>
+        <file>UpdateRemarkDialog.qml</file>
     </qresource>
 </RCC>

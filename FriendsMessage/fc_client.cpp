@@ -35,7 +35,8 @@ FC_Client::~FC_Client()
     qDebug()<<"fc_client destructor"<<endl;
 }
 
-void FC_Client::add_msg_to_socket(FC_Message &msg)
+
+void FC_Client::add_msg_to_socket(FC_Message *msg)
 {
     (*_fc_connection).write(msg);
 }
@@ -45,7 +46,12 @@ void FC_Client::add_msg_to_qml(char *msg)
     _handle->displaytoQML(msg);
 }
 
-void FC_Client::add_msg_to_qml(FC_Message &msg)
+//void FC_Client::add_msg_to_qml(FC_Message &msg)
+//{
+//    _handle->displaytoQML(msg);
+//}
+
+void FC_Client::add_msg_to_qml(FC_Message *msg)
 {
     _handle->displaytoQML(msg);
 }
@@ -100,7 +106,7 @@ void FC_Client::json_data_parser()
     }
     _buddy_list->addBuddyModel();
     //移除这个文件，暂时不移动
-//    remove(file_path.c_str());
+    remove(file_path.c_str());
 }
 
 void FC_Client::test_data()

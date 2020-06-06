@@ -20,9 +20,9 @@ public:
     FC_Client();
     ~FC_Client();
 
-    void add_msg_to_socket(FC_Message& msg);
+    void add_msg_to_socket(FC_Message* msg);
     void add_msg_to_qml(char* msg);
-    void add_msg_to_qml(FC_Message& msg);
+    void add_msg_to_qml(FC_Message* msg);
     //set funcation
     void setUniqueUserName(std::string name);
     //get funcation

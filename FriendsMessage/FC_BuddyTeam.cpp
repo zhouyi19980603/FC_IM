@@ -42,10 +42,20 @@ QString BuddyTeam::teamname() const
     return m_teamname;
 }
 
+int BuddyTeam::teamId() const
+{
+    return m_id;
+}
+
 void BuddyTeam::setTeamname(const QString &str)
 {
     m_teamname = str;
 //    emit teamChanged();
+}
+
+void BuddyTeam::setTeamId(const int &id)
+{
+    m_id = id;
 }
 
 void BuddyTeam::appendItem(QQmlListProperty<BuddyItem> *list, BuddyItem *p)

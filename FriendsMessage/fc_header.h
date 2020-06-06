@@ -11,6 +11,7 @@
 //most body length
 #define FC_MESSAGE_BODY_LENGTH 1024
 
+
 //part one -- message about
 #define FC_MESSAGES unsigned(1<<31)
 #define FC_TEXT_MEG unsigned(FC_MESSAGES | 1<<1)
@@ -22,7 +23,11 @@
 #define FC_FRIENDS_ADD          unsigned(FC_FRIENDS | 1<<3)
 #define FC_FRIENDS_ADD_R        unsigned(FC_FRIENDS | 1<<4)
 #define FC_DELETE_FRIENDS       unsigned(FC_FRIENDS | 1<<5)
-#define FC_FRIENDS_MESSAGE      unsigned(FC_FRIENDS | 1<<6)
+#define FC_FRIENDS_MESSAGE      unsigned(FC_FRIENDS | 1<<6)  //好友列表
+#define FC_FRIENDS_MES          unsigned(FC_FRIENDS | 1<<7) //好友信息（备注，分组）
+#define FC_FRIENDS_REMARK       unsigned(FC_FRIENDS_MES | 1<<0) //备注
+#define FC_FRIENDS_GROUP        unsigned(FC_FRIENDS_MES | 1<<1) //分组
+#define FC_FRIENDS_TEST         unsigned(FC_FRIENDS | 1<<0) //分组
 
 
 //part three -- profile about

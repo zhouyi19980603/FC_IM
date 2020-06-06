@@ -14,10 +14,12 @@ import QtQuick.Layouts 1.11
 import buddy 1.0
 
 Page {
+    id:root
     visible: true
     width: 420
     height: 800
     Material.background: "white"
+    property alias listModel: listView.model
     header: ToolBar{
         Label{
             text: qsTr("好友列表")
@@ -161,9 +163,27 @@ Page {
                     Menu {
                               id: contextMenu
                               MenuItem { text: "修改好友备注"
-                                onClicked: console.log("wef")
+                                  onClicked: {
+//                                      console.log("teamId: " + teamId)
+//                                      console.log("itemId: " + itemId)
+                                      var component = Qt.createComponent("UpdateRemarkDialog.qml");
+                                      if(component.status === Component.Ready){
+                                          var object=component.createObject(root);
+                                          object.teamId = teamId;
+                                          object.itemId = itemId;
+                                          //可以修改对方的值
+                                      }
+                                  }
+
                               }
-                              MenuItem { text: "删除好友" }
+                              MenuItem {
+                                  text: "删除好友"
+                                  onClicked: {
+                                      message_handle.delete_friend(teamId,itemId);
+                                      listModel = teamModel.teams;
+                                  }
+
+                              }
                               MenuItem { text: "移动联系人至"}
                           }
                     }
@@ -172,6 +192,7 @@ Page {
             }
         }
     }
+    Component.onCompleted: console.log("buddys init ok")
 
 
 }

@@ -3,7 +3,19 @@
 #include <QQuickItem>
 #include <QQuickView>
 #include <memory>
+#include <string>
+#include "FC_BuddyItem.h"
+#include "FC_BuddyModel.h"
+#include "FC_BuddyTeam.h"
+#include "fc_buddylist_ctrl.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+#include <json/json.h>
 
+
+
+using namespace boost::property_tree;
 
 
 FC_Message_Handle::FC_Message_Handle()
@@ -44,59 +56,81 @@ void FC_Message_Handle::add_friends(const QString &msg)
     message->set_body(body,strlen(body));
 
     free(account);
-    _client->add_msg_to_socket(*message);
+    _client->add_msg_to_socket(message);
 
 }
 
 void FC_Message_Handle::add_friends_result(const char* accout,const QString &msg)
 {
-    FC_Message message;
-    message.set_message_type(FC_FRIENDS_ADD_R);
+    FC_Message* message = new FC_Message;
+    message->set_message_type(FC_FRIENDS_ADD_R);
     char* status = (char*) malloc(3);
     memset(status,'\0',3);
     strcpy(status,"ok"); //test data
-    message.set_body_length(2*FC_ACC_LEN + strlen(status));  //?
-    message.set_friend_identify(accout);
-    message.set_self_identify(stringTochar(_client->getUniqueUserName()));
-    message.set_core_body(status,strlen(status));
+    message->set_body_length(2*FC_ACC_LEN + strlen(status));  //?
+    message->set_friend_identify(accout);
+    message->set_self_identify(stringTochar(_client->getUniqueUserName()));
+    message->set_core_body(status,strlen(status));
     free(status);
     _client->add_msg_to_socket(message);
     //假设同意添加好友
 }
 
-void FC_Message_Handle::delete_friend(const QString &msg)
+void FC_Message_Handle::update_remark(const int &team, const int &item, const QString &user)
 {
-    qDebug()<<"delete friend: "<<msg;
-    char* account = (char*)malloc(msg.size()+1);
-    memset(account,'\0',msg.size()+1);
-    strcpy(account,msg.toLocal8Bit().data());//friends unique
+    //本地修改
+    _client->get_buddy_list()->SetBuddyItemNickName(team,item,user.toLocal8Bit().data());
+    _client->get_buddy_list()->addBuddyModel();
 
-//    std::cout<<"_client name:"<<_client->getUniqueUserName();
-    char* self = stringTochar(_client->getUniqueUserName());
-//    char* body = text_content(account,self);//好友在前，自己在后
 
-    //消息
-    FC_Message message;
-    message.set_message_type(FC_DELETE_FRIENDS);
-    message.set_body_length(strlen(account) + strlen(self));
-    message.set_friend_identify(account);
-    message.set_self_identify(self);
+    string content = _client->getUniqueUserName() +'.'+std::to_string(team)+'.'+std::to_string(item)+'.'+user.toLocal8Bit().data();
 
-    free(account);
-//    free(self);
-    _client->add_msg_to_socket(message);
+//    cout<<"content:"<<content<<endl;
 
-//    free(body);
+//    Json::Value root;
+//    root["username"] = self;
+//    root["teamId"] = team;
+//    root["itemId"] = item;
+//    root["remark"] = user.toLocal8Bit().data();
+
+//    Json::FastWriter writer;
+//    string strJson = writer.write(root);
+
+    FC_Message* msg = new FC_Message;
+    msg->set_message_type(FC_FRIENDS_REMARK);
+    msg->set_body_length(content.size());
+    msg->set_body(content.c_str(),msg->body_length());
+
+
+
+    _client->add_msg_to_socket(msg);
 
 }
+
+void FC_Message_Handle::delete_friend(const int &team, const int &item)
+{
+    //本地修改
+    _client->get_buddy_list()->DelBuddyItem(team,item);
+    _client->get_buddy_list()->addBuddyModel();
+    string content = _client->getUniqueUserName() +'.'+std::to_string(team)+'.'+std::to_string(item);
+
+    FC_Message* msg = new FC_Message;
+    msg->set_message_type(FC_DELETE_FRIENDS);
+    msg->set_body_length(content.size());
+    msg->set_body(content.c_str(),msg->body_length());
+
+    _client->add_msg_to_socket(msg);
+}
+
+
+
 
 void FC_Message_Handle::search_show(char *msg)
 {
     qDebug()<<"displaytoQML msg: "<<msg<<"\n";
-//    emit showToQml(msg);
     if(strcmp(msg,"error\0") == 0 )
     {
-        qDebug()<<"输出错误消息"<<"\n";
+        qDebug()<<"没有这个好友信息"<<"\n";
     }else
     {
 //        QQuickView view(QUrl("qrc:/FriendsMessage.qml"));
@@ -132,17 +166,11 @@ void FC_Message_Handle::login(const QString &userAcount,const QString &password)
 
     std::cout<<"输出"<<_client->getUniqueUserName();
 
-    FC_Message message;
-    message.set_message_type(FC_SIGN_IN);
-    message.set_body_length(strlen(account));
-    message.set_body(account,strlen(account));
-//    qDebug()<<"hi: "<<message.header()<<"\n";
+    FC_Message* message = new FC_Message;
+    message->set_message_type(FC_SIGN_IN);
+    message->set_body_length(strlen(account));
+    message->set_body(account,strlen(account));
 
-//    message.set_body_length(strlen(account)+strlen(pass));
-////     std::cout<<message.body_length()<<std::endl;
-//    char* body = text_content(account,pass);
-//    message.set_body(body,strlen(account)+strlen(pass));
-//    std::cout<<body<<std::endl;
     free(account);
     _client->add_msg_to_socket(message);
 }
@@ -161,18 +189,19 @@ void FC_Message_Handle::search_friends(const QString &friendsAccount)
     fc_message->set_body(account,strlen(account));
 
     free(account);//记得释放内存，否则会报错
-    _client->add_msg_to_socket(*fc_message);
+    _client->add_msg_to_socket(fc_message);
 
 }
 
-void FC_Message_Handle::displaytoQML(FC_Message &message)
+
+void FC_Message_Handle::displaytoQML(FC_Message *message)
 {
-    switch (message.mess_type()) {
+    switch (message->mess_type()) {
     case FC_FRIENDS_SEARCH_R:   //搜索结果显示
-        search_show(message.body());
+        search_show(message->body());
         break;
     case FC_FRIENDS_ADD:      //添加好友结果
-        add_friends_result(message.body(),"ok");
+        add_friends_result(message->body(),"ok");
         //将添加信息发送给用户界面
         //
         break;

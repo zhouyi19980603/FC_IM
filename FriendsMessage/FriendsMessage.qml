@@ -79,7 +79,7 @@ Page{
                }
                Label{
                    id:nick
-                   text: qsTr("周意")
+                   text: qsTr("Gftae")
                    color: "grey"
                }
            }

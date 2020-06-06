@@ -33,6 +33,7 @@ public:
     char* get_self_identify() const;
     char* get_core_body() const;
 
+
     //setter
     void set_body_length(unsigned body_len);
     void set_message_type(unsigned type);

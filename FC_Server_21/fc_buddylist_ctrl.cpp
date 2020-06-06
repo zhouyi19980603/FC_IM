@@ -1,7 +1,4 @@
 #include "fc_buddylist_ctrl.h"
-#include "FC_BuddyItem.h"
-#include "FC_BuddyModel.h"
-#include "FC_BuddyTeam.h"
 
 
 FC_BuddyItem::FC_BuddyItem()
@@ -40,7 +37,7 @@ FC_BuddyTeamItem::~FC_BuddyTeamItem()
 
 //}
 
-FC_BuddyListCtrl::FC_BuddyListCtrl(FC_Client *client)
+FC_BuddyListCtrl::FC_BuddyListCtrl(FC_Server *client)
     :_client(client)
 {
 
@@ -237,6 +234,34 @@ string FC_BuddyListCtrl::GetBuddyItemNickName(int nTeamIndex, int nIndex)
         return lpItem->m_strNickName;
 }
 
+string FC_BuddyListCtrl::GetBuddyItemMarkName(int nTeamIndex, int nIndex)
+{
+    FC_BuddyItem* lpItem = GetBuddyItemByIndex(nTeamIndex,nIndex);
+    if(lpItem != nullptr)
+        return lpItem->m_strMarkName;
+}
+
+string FC_BuddyListCtrl::GetBuddyItemSignName(int nTeamIndex, int nIndex)
+{
+    FC_BuddyItem* lpItem = GetBuddyItemByIndex(nTeamIndex,nIndex);
+    if(lpItem != nullptr)
+        return lpItem->m_strSign;
+}
+
+string FC_BuddyListCtrl::GetBuddyItemHeading(int nTeamIndex, int nIndex)
+{
+    FC_BuddyItem* lpItem = GetBuddyItemByIndex(nTeamIndex,nIndex);
+    if(lpItem != nullptr)
+        return lpItem->m_strHeadImgName;
+}
+
+string FC_BuddyListCtrl::GetBuddyItemGender(int nTeamIndex, int nIndex)
+{
+    FC_BuddyItem* lpItem = GetBuddyItemByIndex(nTeamIndex,nIndex);
+    if(lpItem != nullptr)
+        return lpItem->m_bGender;
+}
+
 FC_BuddyTeamItem *FC_BuddyListCtrl::GetBuddyTeamByIndex(int nIndex)
 {
     if(nIndex >=0 && nIndex < (int)m_arrBuddyTeamItems.size())
@@ -260,31 +285,4 @@ FC_BuddyItem *FC_BuddyListCtrl::GetBuddyItemByIndex(int nTeamIndex, int nIndex)
     return nullptr;
 }
 
-void FC_BuddyListCtrl::addBuddyModel()
-{
-
-    BuddyModel* model = BuddyModel::getInstance();
-    model->clearTeams(); //客服端修改成功
-    for(int i=0;i<this->GetBuddyTeamCount();i++)
-    {
-        BuddyTeam* team = new BuddyTeam ();
-        string str = this->GetBuddyTeamName(i);
-        team->setTeamname(QString::fromLocal8Bit(str.c_str()));
-        team->setTeamId(i);
-        for(int j=0;j<this->GetBuddyItemCount(i);j++)
-        {
-            BuddyItem* item = new BuddyItem();
-            string account = this->GetBuddyItemAccNum(i,j);
-            string nickName = this->GetBuddyItemNickName(i,j);
-
-            item->setAccount(QString::fromLocal8Bit(account.c_str()));
-            item->setNickname(QString::fromLocal8Bit(nickName.c_str()));
-            item->setItemId(j);
-            team->appendItem(item);
-
-            cout<<"account: "<<account<<" nickname: "<<nickName<<endl;
-        }
-         model->appendTeam(team);
-    }
-}
 

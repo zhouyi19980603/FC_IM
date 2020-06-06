@@ -9,6 +9,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         fc_accept.cpp \
+        fc_buddylist_ctrl.cpp \
         fc_database.cpp \
         fc_message.cpp \
         fc_server.cpp \
@@ -17,7 +18,7 @@ SOURCES += \
         main.cpp
 
 QML_IMPORT_PATH =
-
+include(json/json.pri)
 
 QML_DESIGNER_IMPORT_PATH =
 
@@ -27,6 +28,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     fc_accept.h \
+    fc_buddylist_ctrl.h \
     fc_database.h \
     fc_header.h \
     fc_message.h \
