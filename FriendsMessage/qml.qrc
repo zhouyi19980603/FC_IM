@@ -16,5 +16,10 @@
         <file>MessagePage.qml</file>
         <file>asserts/right.jpg</file>
         <file>UpdateRemarkDialog.qml</file>
+        <file>MeAbout.qml</file>
+        <file>asserts/logo.jpg</file>
+        <file>Setting.qml</file>
+        <file>UpdateName.qml</file>
+        <file>UpdateSex.qml</file>
     </qresource>
 </RCC>

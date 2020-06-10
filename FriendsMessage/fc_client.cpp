@@ -2,6 +2,7 @@
 #include "fc_message_handle.h"
 #include "fc_thread_pool.h"
 #include "fc_buddylist_ctrl.h"
+#include "fc_profile_handle.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
@@ -15,6 +16,7 @@ FC_Client::FC_Client()
     _thread_pool = new FC_Thread_Pool;
     this->_handle = new FC_Message_Handle(this);
     this->_buddy_list = new FC_BuddyListCtrl (this); //申请新空间
+    this->_profile = new FC_Profile(this);
     io_context& _io_context = _thread_pool->getIOCOntext();
 
     tcp::resolver resolver(_io_context);
@@ -32,6 +34,7 @@ FC_Client::~FC_Client()
     delete _thread_pool;
     delete _handle;
     delete _buddy_list;
+    delete _profile;
     qDebug()<<"fc_client destructor"<<endl;
 }
 
@@ -41,10 +44,10 @@ void FC_Client::add_msg_to_socket(FC_Message *msg)
     (*_fc_connection).write(msg);
 }
 
-void FC_Client::add_msg_to_qml(char *msg)
-{
-    _handle->displaytoQML(msg);
-}
+//void FC_Client::add_msg_to_qml(char *msg)
+//{
+//    _handle->displaytoQML(msg);
+//}
 
 //void FC_Client::add_msg_to_qml(FC_Message &msg)
 //{
@@ -65,6 +68,11 @@ std::string FC_Client::getUniqueUserName()
 {
     std::cout<<uniqueUserName<<std::endl;
     return this->uniqueUserName;
+}
+
+void FC_Client::json_data_parser_self(const string &content)
+{
+    _profile->parser_json(content);
 }
 
 //得到服务端的解析信息

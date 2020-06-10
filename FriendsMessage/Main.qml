@@ -48,6 +48,10 @@ Page {
                 // @disable-check M16
                 pageSource:"Content.qml"
             }
+            ListElement{
+                // @disable-check M16
+                pageSource:"MeAbout.qml"
+            }
 
         }
         Component{
@@ -72,6 +76,9 @@ Page {
                 }
                 TabButton {
                     text: qsTr("动态")
+                }
+                TabButton{
+                    text: qsTr("我")
                 }
     }
 }

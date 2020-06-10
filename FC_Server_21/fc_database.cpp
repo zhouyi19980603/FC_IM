@@ -4,113 +4,96 @@
 #include <QSqlDatabase>
 #include <QDebug>
 #include <QSqlQuery>
-
-//bool User::createConnect()
-//{
-//    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-//    db.setHostName("localhost");
-//    db.setDatabaseName("user_message");
-//    db.setUserName("root");
-//    db.setPassword("root");
-
-//    if(!db.open())
-//    {
-//        qDebug()<<"failed"<<endl;
-//        return false;
-//    }else {
-//        qDebug()<<"succed"<<endl;
-//        return true;
-//    }
-//    db.close();
-//}
-
-//User::~User()
-//{
-
-//}
-
-//User::User()
-//{
-//    m_userEmail="@123";
-//    m_password="123";
-//}
-
-////查询
-//bool User::queryMessage(const QString &userEmail, const QString &password)
-//{
-//    if(createConnect())
-//    {
-//        QString queryValue = "select *from user where email='"+userEmail+"' and password='"+password+"'";
-//        QSqlQuery query;
-//        query.exec(queryValue);
-//        if(query.size() == 0)
-//            return false;
-//        else {
-//            return true;
-//        }
-//    }
-//}
-
-////插入
-//bool User::insertMessage(const QString &userEmail, const QString &password)
-//{
-//    if(createConnect())
-//    {
-//        QString queryInsert = "insert into user(email,password) values('"+userEmail+"','"+password+"')";
-//        QSqlQuery query;
-//        if(query.exec(queryInsert))
-//            return true;
-//        else
-//            return false;
-//    }
-//}
+#include <QMessageBox>
 
 
-FC_Database::FC_Database(FC_Server *server)
-    :_server(server)
+FC_DataBase::~FC_DataBase()
 {
-
+    db.close();
 }
 
-unordered_map<string, unordered_map<string, vector<string> > > FC_Database::getFriendList()
+FC_DataBase::FC_DataBase()
 {
-    unordered_map<string, unordered_map<string, vector<string> > > _groupList;
-    _groupList["@12345"]["friends"].push_back("@13456");
-    _groupList["@12345"]["family"].push_back("@56789");
-    _groupList["@24567"]["friends"].push_back("@13456");
-    _groupList["@24567"]["friends"].push_back("@23456");
-    return _groupList;
-//    if(createConnect())
-//        qDebug()<<"ok"<<endl;
+    createConnect();
 }
 
-//数据库中初始化好友列表信息
-//std::unordered_map<std::string, std::vector<std::string> > FC_Database::getFriendList()
-//{
-//    std::unordered_map<std::string, std::vector<std::string> > _friendslist;
-//    _friendslist["@12345"].push_back("@13456");
-//    _friendslist["@12345"].push_back("@56789");
-//    _friendslist["@24567"].push_back("@13456");
-
-//    return _friendslist;
-////    createConnect();
-//}
-
-bool FC_Database::createConnect()
+bool FC_DataBase::createConnect()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+
+    //连接数据库
+    db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("localhost");
     db.setDatabaseName("FC_IM");
     db.setUserName("root");
-    db.setPassword("passworld");
+    db.setPassword("root");
 
     if(!db.open())
     {
+//        QMessageBox::critical(0,QObject::tr("后台数据库连接失败"),"无法创建连接！请重新排查故障后重启程序.",QMessageBox::Cancel);
         qDebug()<<"failed"<<endl;
         return false;
     }else {
         qDebug()<<"succed"<<endl;
         return true;
     }
-    db.close();
+}
+
+bool FC_DataBase::isQueryExist(const QString &sql)
+{
+    QSqlQuery query;
+    if(query.exec(sql))
+    {
+        qDebug()<<"exist";
+        return true;
+    }
+    else
+        return false;
+}
+//将查询结果存储在json文件中即可
+
+//返回读取到的sql信息，在单独的实体数据库代管类中，再去进行相应的调用
+
+QSqlQuery FC_DataBase::query(const QString &sql)
+{
+    QSqlQuery query;
+    query.exec(sql);
+    qDebug() << "query size "<<query.size();
+    return  query;
+
+}
+
+bool FC_DataBase::insert(const QString &sql)
+{
+    QSqlQuery query;
+    if(query.exec(sql))
+    {
+        qDebug()<<"insert";
+        return true;
+    }
+    else
+        return false;
+}
+
+bool FC_DataBase::move(const QString &sql)
+{
+    QSqlQuery query;
+    if(query.exec(sql))
+    {
+        qDebug()<<"move";
+        return true;
+    }
+    else
+        return false;
+}
+
+bool FC_DataBase::update(const QString &sql)
+{
+    QSqlQuery query;
+    if(query.exec(sql))
+    {
+        qDebug()<<"update";
+        return true;
+    }
+    else
+        return false;
 }

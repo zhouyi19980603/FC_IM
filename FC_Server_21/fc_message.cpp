@@ -8,9 +8,6 @@
 
 FC_Message::FC_Message()
 {
-//    this->_header_length = FC_MESSAGE_HEADER_LENGTH;
-//    this->_body_length = 0;
-//    this->_message_type = 0;
     this->_data = (char *)malloc(FC_MESSAGE_HEADER_LENGTH+1);
     memset(this->_data,'\0',FC_MESSAGE_HEADER_LENGTH+1);
 }

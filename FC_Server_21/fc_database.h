@@ -8,32 +8,34 @@
 #include <unordered_map>
 #include <vector>
 
-class FC_Server;
-//class User : public QObject
-//{
-//  Q_OBJECT
-//public:
-//    User();
-//    Q_INVOKABLE bool queryMessage(const QString& userEmail,const QString& password);
-//    Q_INVOKABLE bool insertMessage(const QString& userEmail,const QString& password);
-//    bool createConnect();
-//    ~User();
+/**************************************************************
 
-//private:
-//    QString m_userEmail;
-//    QString m_password;
+  @brief....:核心底层数据库，基础操作
+  @author...: zhouyi
+  @date.....:2020-05-18
 
-//};
-using namespace std;
+  ************************************************************/
 
-class FC_Database
+#include <QObject>
+#include <QString>
+#include <QVector>
+#include <QSqlDatabase>
+
+
+class FC_DataBase
 {
 public:
-    FC_Database(FC_Server *server);
-    unordered_map<string,unordered_map<string,vector<string>>> getFriendList();
-private:
+    FC_DataBase();
+    bool isQueryExist(const QString& sql); //判断sql语句是否存在数据库中
+    QSqlQuery query(const QString& sql);
+    bool insert(const QString& sql);
+    bool move(const QString& sql);
+    bool update(const QString& sql);
     bool createConnect();
-    FC_Server* _server;
+    ~FC_DataBase();
+private:
+   //这里放Server总类
+    QSqlDatabase db;
 };
 
 #endif // FC_DATABASE_H

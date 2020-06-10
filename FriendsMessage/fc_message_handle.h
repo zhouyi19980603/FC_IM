@@ -22,7 +22,7 @@ public slots:
     void show();
 
 public:
-    Q_INVOKABLE void login(const QString& userAcount,const QString& password); //login
+//    Q_INVOKABLE void login(const QString& userAcount,const QString& password); //login
     void registered(); //register
     Q_INVOKABLE void search_friends(const QString& friendsAccount);
     Q_INVOKABLE void add_friends(const QString &msg);
@@ -34,7 +34,6 @@ public:
 
 
     void displaytoQML(FC_Message* message);
-    void displaytoQML(char *msg);
 
 
 

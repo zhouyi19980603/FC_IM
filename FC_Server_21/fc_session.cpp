@@ -71,13 +71,17 @@ void FC_Session::friends_search_handle()
     write(message); //return search message
 }
 
-void FC_Session::add_connection()
+void FC_Session::add_connection(const string &acc)
 {
-    cout<<"_fc_message body"<<_fc_message.body()<<endl;
-    _server._onlineP[_fc_message.body()] = shared_from_this();
-    _server.test_data();
-    //    _onlineP[_fc_message.body()]=shared_from_this();
+    //这是在线用户列表
+    _server._onlineP[acc] = shared_from_this();
+    //现在还需要发送用户信息
+//    send_self_msg(acc);
+    send_self_msg(acc); //通道传递数据不可以过大
+    //发送好友列表过去
+//    send_friends_lists(acc);
 }
+
 
 //5.6 在添加好友这里，5.7还是这里
 void FC_Session::add_friends()
@@ -189,8 +193,33 @@ void FC_Session::delete_friend()
     int team = stoi(teamId);
     int item = stoi(itemId);
 
+    cout<<"delete_friend: "<<account<<endl;
+
     _server._friendsList[account]->DelBuddyItem(team,item);
-    _server.make_data_json();
+    _server.make_data_json(); //更新数据库
+}
+
+//帐号的验证
+void FC_Session::login_verify()
+{
+    char* account = new char[FC_ACC_LEN+1];
+    memset(account,'\0',FC_ACC_LEN+1);
+    memcpy(account,_fc_message.body(),FC_ACC_LEN);
+
+    char* password = new char[_fc_message.body_length()-FC_ACC_LEN+1];
+    memset(password,'\0',_fc_message.body_length()-FC_ACC_LEN+1);
+    strcpy(password,_fc_message.body()+FC_ACC_LEN);
+
+    if(_server.login_verify(account,password))
+    {
+        add_connection(account);
+    }
+    else
+    {
+        cout<<"login failed"<<endl;
+        exit(0);
+    }
+
 }
 
 void FC_Session::send_friends_lists(string username)
@@ -199,6 +228,19 @@ void FC_Session::send_friends_lists(string username)
     str = make_json(username);
     FC_Message* msg = new FC_Message;
     msg->set_message_type(FC_FRIENDS_MESSAGE);
+
+    clog << "make_json::body_size():" << str.size() << endl;
+    msg->set_body_length(str.size());
+    msg->set_body(str.c_str(),str.size());
+    write(msg);
+}
+
+void FC_Session::send_self_msg(const string &username)
+{
+    std::string str ;
+    str = make_json_user(username);
+    FC_Message* msg = new FC_Message;
+    msg->set_message_type(FC_SELF_MES);
 
     clog << "make_json::body_size():" << str.size() << endl;
     msg->set_body_length(str.size());
@@ -227,8 +269,6 @@ void FC_Session::handle_remark()
 
     _server._friendsList[account]->SetBuddyItemNickName(team,item,remark);
     _server.make_data_json();
-//    return_message_ok();
-
 
 }
 
@@ -278,8 +318,7 @@ void FC_Session::do_read_body()
             case FC_SIGN_IN:
                 cout<<"login"<<endl;
                 //按理说登录也会返回相应的信息
-                add_connection();
-                send_friends_lists(_fc_message.body());
+                login_verify();
                 cout<<_server._onlineP.size()<<endl;
                 break;
             case FC_FRIENDS_ADD:
@@ -353,6 +392,8 @@ void FC_Session::do_write(FC_Message *msg)
 //    write(message);
 //}
 
+//生成json文件
+
 string FC_Session::make_json(string username)
 {
     const string file_path = "buddys.json";
@@ -410,6 +451,36 @@ string FC_Session::make_json(string username)
     }
     std::stringstream ss;
     boost::property_tree::write_json(ss, pt_allitem);
+    std::string strContent = ss.str();
+    return strContent;
+}
+
+string FC_Session:: make_json_user(const string &username)
+{
+    const string file_path = "user.json";
+    ptree root;
+    ptree users;
+    ptree writeroot,writeitem;
+    try {
+        read_json<boost::property_tree::ptree>(file_path,root);
+    } catch (ptree_error& e) {
+        clog << "FC_Session::make_json_user:" << e.what() << endl;
+    } catch(int e ){
+        clog <<"FC_Session::make_json_user:" <<e << endl;
+    }
+
+    users = root.get_child("users");//得到数组
+    for(ptree::iterator it = begin(users);it != end(users);it++)
+    {
+        if(it->second.get<string>("account") == username)
+        {
+            writeroot.put("account",it->second.get<string>("account"));
+            writeroot.put("nickname",it->second.get<string>("nickname"));
+            writeroot.put("gender",it->second.get<string>("gender"));
+        }
+    }
+    std::stringstream ss;
+    boost::property_tree::write_json(ss, writeroot);
     std::string strContent = ss.str();
     return strContent;
 }

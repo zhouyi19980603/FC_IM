@@ -14,6 +14,7 @@
 #include <json/json.h>
 
 
+//控制类 好友模块的
 
 using namespace boost::property_tree;
 
@@ -62,11 +63,20 @@ void FC_Message_Handle::add_friends(const QString &msg)
 
 void FC_Message_Handle::add_friends_result(const char* accout,const QString &msg)
 {
+//    int m_id = _client->get_buddy_list()->GetBuddyItemCount(0);//默认分组
+//    _client->get_buddy_list()->AddBuddyItem(0,m_id);
+//    _client->get_buddy_list()->SetBuddyTeamMaxCnt(0,m_id+1);
+//    _client->get_buddy_list()->SetBuddyItemAccNum(0,m_id,accout);
+//    _client->get_buddy_list()->addBuddyModel(); //更新数据
+
     FC_Message* message = new FC_Message;
     message->set_message_type(FC_FRIENDS_ADD_R);
     char* status = (char*) malloc(3);
     memset(status,'\0',3);
     strcpy(status,"ok"); //test data
+
+
+
     message->set_body_length(2*FC_ACC_LEN + strlen(status));  //?
     message->set_friend_identify(accout);
     message->set_self_identify(stringTochar(_client->getUniqueUserName()));
@@ -143,37 +153,37 @@ void FC_Message_Handle::search_show(char *msg)
 }
 
 
-void FC_Message_Handle::login(const QString &userAcount,const QString &password)
-{
-    qDebug()<<userAcount<<"  "<<password<<"\n";
-    char* account = (char*)malloc(userAcount.size()+1);
-    memset(account,'\0',userAcount.size()+1);
+//void FC_Message_Handle::login(const QString &userAcount,const QString &password)
+//{
+//    qDebug()<<userAcount<<"  "<<password<<"\n";
+//    char* account = (char*)malloc(userAcount.size()+1);
+//    memset(account,'\0',userAcount.size()+1);
 
-    strcpy(account,userAcount.toLocal8Bit().data());
-//    char account[userAcount.size()+1];
-//    QByteArray sr=userAcount.toLocal8Bit();
+//    strcpy(account,userAcount.toLocal8Bit().data());
+////    char account[userAcount.size()+1];
+////    QByteArray sr=userAcount.toLocal8Bit();
 
-//    //QString to char*
-//    strcpy(account,sr.data());
+////    //QString to char*
+////    strcpy(account,sr.data());
 
-//    char* pass= (char*)malloc(password.size());
-//    strcpy(pass,password.toLocal8Bit().data());
+////    char* pass= (char*)malloc(password.size());
+////    strcpy(pass,password.toLocal8Bit().data());
 
-    //test data
-//    std::cout<<"account"<<account<<std::endl;
-//    std::cout<<"password"<<pass<<std::endl;
-    _client->setUniqueUserName(account);//复制用户名信息
+//    //test data
+////    std::cout<<"account"<<account<<std::endl;
+////    std::cout<<"password"<<pass<<std::endl;
+//    _client->setUniqueUserName(account);//复制用户名信息
 
-    std::cout<<"输出"<<_client->getUniqueUserName();
+//    std::cout<<"输出"<<_client->getUniqueUserName();
 
-    FC_Message* message = new FC_Message;
-    message->set_message_type(FC_SIGN_IN);
-    message->set_body_length(strlen(account));
-    message->set_body(account,strlen(account));
+//    FC_Message* message = new FC_Message;
+//    message->set_message_type(FC_SIGN_IN);
+//    message->set_body_length(strlen(account));
+//    message->set_body(account,strlen(account));
 
-    free(account);
-    _client->add_msg_to_socket(message);
-}
+//    free(account);
+//    _client->add_msg_to_socket(message);
+//}
 
 void FC_Message_Handle::search_friends(const QString &friendsAccount)
 {
@@ -209,22 +219,6 @@ void FC_Message_Handle::displaytoQML(FC_Message *message)
 }
 
 //5.6 显示在QML中去,显示在,这里判定不同的信息将有不同的显示方式，即消息类型不同，显示不同
-void FC_Message_Handle::displaytoQML(char *msg)
-{
-    qDebug()<<"displaytoQML msg: "<<msg;
-    if(strcmp(msg,"error\0") == 0 )
-    {
-        qDebug()<<"输出错误消息";
-    }else
-    {
-//        QQuickView view(QUrl("qrc:/FriendsMessage.qml"));
-//        QObject *item=view.rootObject();
-//        QVariant msg1="hello c++";
-//        QMetaObject::invokeMethod(item,"showF",Q_ARG(QVariant,msg));
-//        delete item;
-    }
-
-}
 
 char *FC_Message_Handle::text_content(const char *account, const char *pass)
 {

@@ -25,12 +25,13 @@ private:
 //    typedef std::shared_ptr<FC_Session> clients_ptr;
 
     void friends_search_handle();//好友查找处理
-    void add_connection();
+    void add_connection(const string& acc);
     void add_friends();
     void add_friends_lists();
     void delete_friend();
+    void login_verify();
     void send_friends_lists(string username);
-//    void send_friends_lists(string username,int flag  );
+    void send_self_msg(const string& username);
     void handle_remark();
 
 //    void on_add
@@ -41,6 +42,7 @@ private:
 
     //about json operation
     string make_json(string username);
+    string make_json_user(const string& username);
 
     void append_josn_node();
 

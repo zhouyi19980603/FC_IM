@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.2
-import UserType 1.0
 import QtQuick.Window 2.12
 
 Window {
@@ -17,9 +16,6 @@ Window {
       width: content.width + 48
       height: content.height + 16
       radius: 4
-    }
-    User{
-      id:user
     }
 
     // registerform content
@@ -79,19 +75,12 @@ Window {
           flat: false
           anchors.horizontalCenter: parent.horizontalCenter
           onClicked: {
-              console.log(txtUsername.text,txtPassword.text)
-//              user.test(txtUsername.text,txtPassword.text)
+//              console.log(txtUsername.text,txtPassword.text)
               //相当于传递的是QString类型
-              message_handle.login(txtUsername.text,txtPassword.text)
-
-
-//              if(user.queryMessage(txtUsername.text,txtPassword.text))
-//              {
+//              message_handle.login(txtUsername.text,txtPassword.text)
+                profile_handle.login(txtUsername.text,txtPassword.text)
                   var component = Qt.createComponent("Core.qml");
                   component.createObject(loginPage);
-                  console.log("login succed")
-
-//              }
           }
         }
 

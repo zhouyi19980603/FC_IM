@@ -25,6 +25,8 @@ SOURCES += \
     fc_connection.cpp \
     fc_message.cpp \
     fc_message_handle.cpp \
+    fc_profile.cpp \
+    fc_profile_handle.cpp \
     fc_thread_pool.cpp \
     main.cpp
 
@@ -59,4 +61,6 @@ HEADERS += \
     fc_header.h \
     fc_message.h \
     fc_message_handle.h \
+    fc_profile.h \
+    fc_profile_handle.h \
     fc_thread_pool.h

@@ -16,13 +16,12 @@ using namespace boost::asio::ip;
 using boost::asio::io_context;
 using namespace std;
 class FC_Thread_Pool;
-class FC_Database;
 class FC_Accept;
 class FC_Session;
 class FC_BuddyListCtrl;
+class DbBroker;
 
 typedef std::shared_ptr<FC_Session> clients_ptr;
-//typedef unordered_map<string,unordered_map<string,vector<string>>> groupmap;
 
 class FC_Server
 {
@@ -41,17 +40,19 @@ public:
     void json_data_parser();
     void make_data_json();
     void test_data();
+    void init_accounts();
+    bool login_verify(const string& acc,const string& pass);
+    void set_accounts(const string& acc,const string& pass);
+    std::unordered_map<std::string,std::string> get_accounts();
 
     std::unordered_map<std::string,FC_BuddyListCtrl*> _friendsList;
 
-    void init_friends_list();
 private:
-
-
 
     FC_Accept* _fc_accept=nullptr;
     FC_Thread_Pool* _thread_pool = nullptr;
-    FC_Database* _fc_friends;  //好友列表的数据库值
+    std::unordered_map<std::string,std::string> _accounts;
+    DbBroker* _broker = nullptr;
 
     //在线列表
     //使用智能指针

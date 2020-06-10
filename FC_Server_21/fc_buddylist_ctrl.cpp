@@ -32,10 +32,7 @@ FC_BuddyTeamItem::~FC_BuddyTeamItem()
     m_arrBuddys.clear(); //清空
 }
 
-//FC_BuddyListCtrl::FC_BuddyListCtrl()
-//{
 
-//}
 
 FC_BuddyListCtrl::FC_BuddyListCtrl(FC_Server *client)
     :_client(client)

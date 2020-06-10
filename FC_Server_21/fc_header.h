@@ -32,8 +32,13 @@
 
 //part three -- profile about
 //#define FC_ACCOUNT_LENGTH unsigned(6)
-#define FC_PROFILE unsigned(1<<29)
-#define FC_SIGN_IN unsigned(FC_PROFILE | 1<<3)  //login request
+#define FC_PROFILE              unsigned(1<<29)
+#define FC_SIGN_IN              unsigned(FC_PROFILE | 1<<3)       //login request
+#define FC_SIGN_IN_R            unsigned(FC_PROFILE | 1<<4)       //login result
+#define FC_SELF_MES             unsigned(FC_PROFILE | 1<<5)       //self message
+#define FC_UPDATE_NICK          unsigned(FC_PROFILE | 1<<6)       //修改网名
+#define FC_UPDATE_HEAD          unsigned(FC_PROFILE | 1<<7)       //修改头像
+#define FC_UPDATE_SEX           unsigned(FC_PROFILE | 1<<8)       //修改性别
 
 
 //part four -- dynamic about

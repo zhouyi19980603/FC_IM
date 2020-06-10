@@ -2,11 +2,14 @@
 #include "fc_thread_pool.h"
 #include "fc_database.h"
 #include "fc_buddylist_ctrl.h"
+#include "fc_db_proxy.h"
+#include <QString>
+#include <QVariant>
 
 FC_Server::FC_Server()
 {
     _thread_pool = new FC_Thread_Pool;
-    _fc_friends = new FC_Database(this);
+//    _fc_friends = new FC_Database(this);
     io_context& _io_context = _thread_pool->getIOCOntext();
     tcp::endpoint endpoint(tcp::v4(),56781);
 
@@ -15,9 +18,13 @@ FC_Server::FC_Server()
 
 }
 
+//现在使用的是第二个构造函数
+
 FC_Server::FC_Server(boost::asio::io_context &io_context, tcp::endpoint &endpoints)
 {
     _fc_accept = new FC_Accept (this,io_context,endpoints); //在这里连接server
+    _broker = new DbBroker(this);
+     init_accounts();
      json_data_parser();//获得从数据库中得到信息，目前为json中获得
 
 }
@@ -133,8 +140,51 @@ void FC_Server::test_data()
 
 }
 
-//void FC_Server::init_friends_list()
-//{
-//    set_groupfriendsList(_fc_friends->getFriendList());
-//}
+void FC_Server::init_accounts()
+{
+        QSqlQuery qu = _broker->get_user_account();
+        while (qu.next()) {
+            QString account = qu.value(0).toString();
+            QString password = qu.value(1).toString();
+            set_accounts(account.toStdString(),password.toStdString());
+        }
+//    const string file_path = "account.json";
+//    ptree root;
+//    ptree accounts;
+//    try {
+//        read_json<boost::property_tree::ptree>(file_path,root);
+//    } catch (ptree_error& e) {
+//        clog << "FC_Session::init_accounts:" << e.what() << endl;
+//    } catch(int e ){
+//        clog <<"FC_Session::init_accounts:" <<e << endl;
+//    }
+
+//    accounts = root.get_child("accounts");
+//    for(ptree::iterator it = begin(accounts);it != end(accounts);it++)
+//    {
+//        string acc = it->second.get<string>("account");
+//        string pass = it->second.get<string>("password");
+//        set_accounts(acc,pass);
+//    }
+//    root.clear();
+}
+
+bool FC_Server::login_verify(const string &acc, const string &pass)
+{
+   if(_accounts[acc] == pass)
+       return true;
+   return false;
+}
+
+void FC_Server::set_accounts(const string &acc, const string &pass)
+{
+    _accounts[acc] = pass;
+}
+
+std::unordered_map<string, string> FC_Server::get_accounts()
+{
+    return this->_accounts;
+}
+
+
 

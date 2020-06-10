@@ -192,7 +192,6 @@ Page {
             }
         }
     }
-    Component.onCompleted: console.log("buddys init ok")
 
 
 }

@@ -89,9 +89,16 @@ void FC_Connection::do_read_body()
                break;
            }
            case FC_FRIENDS_ADD_R:
+           {
                //产生一个添加好友结果
-               std::cout<<"add friends result: "<<_fc_message->body()<<std::endl;
+               std::cout<<"add friends result: "<<_fc_message->get_self_identify()<<std::endl;
+               int m_id = _client->get_buddy_list()->GetBuddyItemCount(0);//默认分组
+               _client->get_buddy_list()->AddBuddyItem(0,m_id);
+               _client->get_buddy_list()->SetBuddyTeamMaxCnt(0,m_id+1);
+               _client->get_buddy_list()->SetBuddyItemAccNum(0,m_id,_fc_message->get_self_identify());
+               _client->get_buddy_list()->addBuddyModel();
                break;
+           }
            case FC_FRIENDS_MESSAGE:
            {
 //               std::cout<<"消息"<<std::endl;
@@ -108,7 +115,10 @@ void FC_Connection::do_read_body()
                std::cout<<"测试数据"<<std::endl;
                break;
            case FC_FRIENDS_REMARK:
-                update_remark();
+               update_remark();
+               break;
+           case FC_SELF_MES:
+               _client->json_data_parser_self(_fc_message->body());
                break;
            default:
                std::cout<<"没有这种类型"<<std::endl;
