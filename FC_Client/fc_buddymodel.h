@@ -26,6 +26,7 @@ public:
     int teamCount() const;
     BuddyTeam *team(int)const;
     void clearTeams();
+    QVector<BuddyTeam*>& get_teams();
 
 signals:
     void teamsChanged(); //定义一个信号 当发生改变时，会通知QML端进行更改

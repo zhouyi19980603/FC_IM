@@ -21,8 +21,11 @@
 
 
 //part one -- message about
-#define FC_MESSAGES unsigned(1<<31)
-#define FC_TEXT_MEG unsigned(FC_MESSAGES | 1<<1)
+#define FC_MESSAGES             unsigned(1<<31)
+#define FC_TEXT_MEG             unsigned(FC_MESSAGES | 1<<1)
+#define FC_GROUP_TEXT_MEG       unsigned(FC_MESSAGES | 1 << 2)
+#define FC_TEXT_MEG_HISTORY     unsigned(FC_MESSAGES | 1<< 3)
+#define FC_FILE_MEG             unsigned(FC_MESSAGES | 1<<4) //发送文件消息
 
 //part two -- friend about
 #define FC_FRIENDS              unsigned(1<<30)
@@ -40,7 +43,9 @@
 
 //part three -- profile about
 #define FC_PROFILE              unsigned(1<<29)
-#define FC_SIGN_IN              unsigned(FC_PROFILE | 1<<3)       //login request
+#define FC_REGISTER             unsigned(FC_PROFILE | 1<<1)       //注册
+#define FC_REGISTER_R           unsigned(FC_PROFILE | 1<<2)       //注册结果
+#define FC_SIGN_IN              unsigned(FC_PROFILE | 1<<3)       //登录
 #define FC_SIGN_IN_R            unsigned(FC_PROFILE | 1<<4)       //login result
 #define FC_SELF_MES             unsigned(FC_PROFILE | 1<<5)       //self message
 #define FC_UPDATE_NICK          unsigned(FC_PROFILE | 1<<6)       //修改网名

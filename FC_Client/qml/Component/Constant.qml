@@ -18,6 +18,8 @@ QtObject {
     readonly property int bigFontPointSize : UI.bigFontPointSize              // 软件标题
 
     readonly property url testPic: Qt.resolvedUrl( "../resource/tests/tests001.jpeg")
+    readonly property url qipaoRight: Qt.resolvedUrl( "../resource/background/active/chat-bubble.png")
+    readonly property url qipaoLeft: Qt.resolvedUrl( "../resource/background/active/chat-bubble1.png")
 
     readonly property alias icons: __icons
     readonly property url iconsPath: "../resource/icons/"
@@ -49,6 +51,11 @@ QtObject {
     readonly property url groupchatIcon: icons.labelIcon("groupchat")                       // 群聊
     readonly property url newfriendsIcon: icons.labelIcon("new-fri")                        // 新的朋友
     readonly property url friendlistright: icons.labelIcon("right")                         // 分组箭头
+    readonly property url toolIcon: icons.labelIcon("ellipsis")                             // 工具栏
+    readonly property url fileIcon: icons.labelIcon("fileIcon")                             // 文件
+    readonly property url returnIcon: icons.labelIcon("return")                             // 返回
+
+    readonly property url addchatIcon: icons.chatIcon("add")
 
     readonly property url shareExcelIcon: icons.share("share-excel")
     readonly property url shareFileIcon: icons.share("share-file")
@@ -80,6 +87,10 @@ QtObject {
 
         function inactiveIcon(name) {
             return Qt.resolvedUrl(iconsPath + "bar-icons/inactive/" + name +".png")
+        }
+
+        function chatIcon(name){
+            return Qt.resolvedUrl(iconsPath + "bar-icons/" + name +".png")
         }
 
         function sampleIcon(name) {

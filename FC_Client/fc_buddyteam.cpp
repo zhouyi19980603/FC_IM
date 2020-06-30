@@ -38,6 +38,11 @@ void BuddyTeam::clearItems()
     m_items.clear();
 }
 
+QVector<BuddyItem *> &BuddyTeam::get_items()
+{
+    return m_items;
+}
+
 QString BuddyTeam::teamname() const
 {
     return m_teamname;

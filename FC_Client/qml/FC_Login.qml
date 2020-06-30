@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Window 2.0
+import QtQuick.Dialogs 1.3
 import "./Component"
 import "./BussinessPage"
 
@@ -12,6 +13,7 @@ Page {
     color: "white"
 
     Constant { id: constant }
+    property var accountValue
 
     Rectangle {
       id: loginForm
@@ -41,7 +43,7 @@ Page {
 
       // email text and field
       Text {
-        text: qsTr("E-mail")
+        text: qsTr("帐号")
         font.pixelSize: 12
       }
 
@@ -49,11 +51,12 @@ Page {
         id: txtUsername
         Layout.preferredWidth: 200
         font.pixelSize: 14
+        text: accountValue
       }
 
       // password text and field
       Text {
-        text: qsTr("Password")
+        text: qsTr("密码")
         font.pixelSize: 12
       }
 
@@ -80,7 +83,7 @@ Page {
           anchors.horizontalCenter: parent.horizontalCenter
           onClicked: {
               profile_handle.login(txtUsername.text,txtPassword.text)
-              __PushPage(Qt.resolvedUrl("./Fc_MainView.qml"), {} ); //压入一个新的界面
+//              __PushPage(Qt.resolvedUrl("./Fc_MainView.qml"), {} ); //压入一个新的界面
           }
         }
 
@@ -89,11 +92,36 @@ Page {
           flat: true
           anchors.horizontalCenter: parent.horizontalCenter
           onClicked: {
-            var component = Qt.createComponent("Register.qml");
-            component.createObject(loginPage);
-            console.debug("registering...")
+              __PushPage(Qt.resolvedUrl("./FC_Register.qml"), {} );
           }
         }
       }
+    }
+
+//    //在这里看状态,如果是登录成功则跳转到Fc_MainView，若为登录失败，则弹出一个对话框
+
+    Connections{
+        target: status_message
+        onStatusChanged:{
+            console.log("状态发生改变")
+            if(status_message.status === 1)
+            {
+                messageDialog.open()
+//                txtUsername.text=""
+                txtPassword.text=""
+                console.log("登录失败")
+            }
+            else if(status_message.status === 0)
+            {
+                console.log("登录成功! 啊啊啊")
+                __PushPage(Qt.resolvedUrl("./Fc_MainView.qml"), {} );
+            }
+
+        }
+    }
+    MessageDialog {
+        id: messageDialog
+        title: "登录失败"
+        text: "帐号或密码错误，请重新登录"
     }
 }

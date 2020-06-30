@@ -20,7 +20,6 @@ Page {
         Item {
             id: content
             width: page.width
-            // width: Math.max(page.viewport.width, column.implicitWidth + 2 * column.spacing)
             height: Math.max(page.viewport.height, column.implicitHeight + 2 * column.spacing)
 
             ColumnLayout {

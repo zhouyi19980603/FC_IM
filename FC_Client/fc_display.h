@@ -13,6 +13,9 @@ class BuddyModel;
 class Buddy;
 class  FC_Message_ListModel;
 class FC_Friends_Handle;
+class FC_Chat_ListModel;
+class FC_Message;
+class FC_MessageStatus;
 
 class FC_Display
 {
@@ -23,7 +26,9 @@ public:
    // void FC_Display::recv(std::vector<std::string> vs);
     //show ui
     void recv(QString s); //display receive message
+    void recv_group_msg(std::vector<std::string> vs);
     void recv(std::vector<std::string> vs); //display receive message
+    void recv_history(FC_Message* msg);
 
 private:
     FC_Client* _client = nullptr;
@@ -31,8 +36,10 @@ private:
     ProfileMsg* _profilemsg=nullptr;
     BuddyModel* _model = nullptr;
     FC_Message_ListModel* _list_model = nullptr;
+    FC_Chat_ListModel* _chat_listModel = nullptr;
     FC_Message_Handle* _handle = nullptr;
     FC_Friends_Handle* _fhandle =nullptr;
+    FC_MessageStatus* _status = nullptr;
     Buddy* _buddy = nullptr;
 
     QGuiApplication* _app_ui = nullptr;

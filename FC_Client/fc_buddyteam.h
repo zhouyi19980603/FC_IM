@@ -30,6 +30,7 @@ public:
     int itemCount() const;
     BuddyItem *item(int)const;
     void clearItems();
+    QVector<BuddyItem *>& get_items();
 
 
     QString teamname()const;

@@ -1,6 +1,5 @@
 #include "fc_buddymodel.h"
 #include "fc_buddyitem.h"
-#include "fc_buddylist_ctrl.h"
 #include <QString>
 
 BuddyModel* BuddyModel::instance = nullptr;
@@ -46,6 +45,11 @@ BuddyTeam *BuddyModel::team(int index) const
 void BuddyModel::clearTeams()
 {
     m_teams.clear();
+}
+
+QVector<BuddyTeam *> &BuddyModel::get_teams()
+{
+    return m_teams;
 }
 
 void BuddyModel::appendTeam(QQmlListProperty<BuddyTeam> *list, BuddyTeam *p)

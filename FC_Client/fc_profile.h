@@ -15,6 +15,7 @@
 class ProfileMsg :public QObject
 {
     Q_OBJECT
+    Q_ENUMS(status)
     Q_PROPERTY(QString account READ account NOTIFY accountChanged)
     Q_PROPERTY(QString nickname READ nickname WRITE setNickname NOTIFY nicknameChanged)
     Q_PROPERTY(QString gender READ gender WRITE setGender NOTIFY genderChanged)
@@ -23,6 +24,11 @@ class ProfileMsg :public QObject
 public:
     static ProfileMsg* getInstance(); //单例的设计模式
 
+    enum status{
+      LoginError, //登录失败
+      LoginSucc, // 登录成功
+      RegisterSucc //注册成功
+    };
 
     //setter
     void setAccount(const QString& acc);
@@ -54,6 +60,8 @@ private:
     QString m_heading; //存放的是图片的路径
     QString m_sign;
     QString m_gender;
+
+
 };
 
 #endif // FC_PROFILE_H

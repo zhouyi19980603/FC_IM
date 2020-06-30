@@ -1,4 +1,5 @@
 #include "fc_profile.h"
+#include <iostream>
 
 ProfileMsg* ProfileMsg::instance = nullptr;
 
@@ -32,11 +33,14 @@ void ProfileMsg::setGender(const QString &gender)
 
 void ProfileMsg::setHeading(const QString &heading)
 {
-    if( m_heading != heading)
-    {
+//    if( m_heading != heading)
+//    {
+        m_heading = "";
         m_heading = heading;
         emit headingChanged();
-    }
+//    }
+    std::cout<<"headingChanged信号"<<std::endl;
+//    emit headingChanged();
 }
 
 void ProfileMsg::setSign(const QString &sign)
